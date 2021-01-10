@@ -1,5 +1,4 @@
-// int64_t to avoid sum overflow, as bounds on number are not stated clearly
-const int64_t kNegativeInfinity = std::numeric_limits<int64_t>::min();
+const int kImpossible = -1;
 
 int solve(std::vector<int>& array, int modulo) {
   const int length = array.size();
@@ -7,7 +6,7 @@ int solve(std::vector<int>& array, int modulo) {
   // dp[prefix length][remainder] = maximum sum
   //   of a subsequence of a given prefix with given modulo remainder
   std::vector<std::vector<int64_t>> dp(length + 1,
-    std::vector<int64_t>(modulo, kNegativeInfinity));
+    std::vector<int64_t>(modulo, kImpossible));
   dp[0][0] = 0;
 
   for (int index = 0; index < length; ++index) {
@@ -16,7 +15,7 @@ int solve(std::vector<int>& array, int modulo) {
 
     // if we DO take array[index] into subsequence sum
     for (int remainder = 0; remainder < modulo; ++remainder) {
-      if (dp[index][remainder] != kNegativeInfinity) {
+      if (dp[index][remainder] != kImpossible) {
         dp[index + 1][(remainder + array[index]) % modulo] =
           std::max(dp[index + 1][(remainder + array[index]) % modulo],
                    dp[index][remainder] + array[index]);
