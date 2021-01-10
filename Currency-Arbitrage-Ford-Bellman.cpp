@@ -1,13 +1,15 @@
-template <typename DistanceType>
-std::vector<DistanceType> FordBellman(const std::vector<std::vector<DistanceType>>& distance_matrix,
-                                      int source = 0);
+template <typename T> 
+using Matrix = std::vector<std::vector<T>>;
 
-bool solve(std::vector<std::vector<double>>& matrix) {
+template <typename DistanceType>
+std::vector<DistanceType> FordBellman(const Matrix<DistanceType>& distance_matrix, int source = 0);
+
+bool solve(Matrix<double>& matrix) {
   const int currencies_number = matrix.size();
 
   // build distance matrix out of negative logarithms
-  std::vector<std::vector<long double>> distance_matrix(
-      currencies_number, std::vector<long double>(currencies_number));
+  Matrix<long double> distance_matrix(currencies_number,
+                                      std::vector<long double>(currencies_number));
   for (int source_currency = 0; source_currency < currencies_number; ++source_currency) {
     for (int destination_currency = 0; destination_currency < currencies_number;
          ++destination_currency) {
@@ -36,12 +38,9 @@ bool solve(std::vector<std::vector<double>>& matrix) {
 }
 
 template <typename DistanceType>
-std::vector<DistanceType> FordBellman(const std::vector<std::vector<DistanceType>>& distance_matrix,
-                                      int source) {
+std::vector<DistanceType> FordBellman(const Matrix<DistanceType>& distance_matrix, int source) {
   const int vertex_number = distance_matrix.size();
-  const DistanceType kUnreachable = std::numeric_limits<DistanceType>::max();
-  std::vector<DistanceType> shortest_distances(vertex_number, kUnreachable);
-  shortest_distances[source] = 0;
+  std::vector<DistanceType> shortest_distances(distance_matrix[0]);
 
   // iterations
   const int iteration_number = vertex_number;
